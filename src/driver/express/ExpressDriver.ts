@@ -244,9 +244,6 @@ export class ExpressDriver extends BaseDriver {
             return;
         }
 
-        // transform result if needed
-        result = this.transformResult(result, action, options);
-
         // set http status code
         if (result === undefined && action.undefinedResultCode) {
             if (action.undefinedResultCode instanceof Function) {

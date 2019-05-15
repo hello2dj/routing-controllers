@@ -1,26 +1,21 @@
 {
-  "name": "routing-controllers",
+  "name": "norc",
   "private": true,
-  "version": "0.7.8",
-  "description": "Create structured, declarative and beautifully organized class-based controllers with heavy decorators usage for Express / Koa using TypeScript.",
+  "version": "1.0.0",
+  "description": "Not Only a Routing Controller, Create structured, declarative and beautifully organized class-based controllers with heavy decorators usage for Express / Koa using TypeScript.",
   "license": "MIT",
   "readmeFilename": "README.md",
   "author": {
-    "name": "Umed Khudoiberdiev",
-    "email": "pleerock.me@gmail.com"
+    "name": "hello2dj",
+    "email": "dengjie.hello2dj@bytedance.com"
   },
-  "contributors": [
-    {
-      "name": "Michał Lytek",
-      "url": "https://github.com/19majkel94"
-    }
-  ],
+  "contributors": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pleerock/routing-controllers.git"
+    "url": "https://github.com/hello2dj/routing-controllers"
   },
   "bugs": {
-    "url": "https://github.com/pleerock/routing-controllers/issues"
+    "url": "https://github.com/hello2dj/routing-controllers/issues"
   },
   "main": "index.js",
   "tags": [
@@ -33,8 +28,6 @@
     "controllers"
   ],
   "dependencies": {
-    "class-transformer": "^0.1.9",
-    "class-validator": "0.8.4",
     "cookie": "^0.3.1",
     "glob": "^7.0.5",
     "reflect-metadata": "^0.1.12",
@@ -47,7 +40,7 @@
     "@types/express-session": "0.0.32",
     "@types/koa": "^2.0.39",
     "@types/mocha": "^2.2.40",
-    "@types/node": "^7.0.12",
+    "@types/node": "^12.0.2",
     "@types/sinon": "^2.1.2",
     "body-parser": "^1.17.1",
     "chai": "^3.4.1",
@@ -87,7 +80,7 @@
     "tslint": "^5.0.0",
     "tslint-stylish": "^2.1.0",
     "typedi": "~0.7.1",
-    "typescript": "~2.7.2"
+    "typescript": "^3.4.5"
   },
   "scripts": {
     "test": "cross-env NODE_ENV=test gulp tests"

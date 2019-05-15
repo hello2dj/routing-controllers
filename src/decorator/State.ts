@@ -14,7 +14,6 @@ export function State(objectName?: string): Function {
             name: objectName,
             parse: false, // it does not make sense for Session to be parsed
             required: true, // when we demand session object, it must exist (working session middleware)
-            classTransform: undefined
         });
     };
 }

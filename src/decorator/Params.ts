@@ -13,7 +13,6 @@ export function Params(): Function {
             index: index,
             parse: false, // it does not make sense for Param to be parsed
             required: false,
-            classTransform: undefined
         });
     };
 }

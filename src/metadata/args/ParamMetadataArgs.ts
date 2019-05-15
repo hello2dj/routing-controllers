@@ -1,5 +1,3 @@
-import {ValidatorOptions} from "class-validator";
-import {ClassTransformOptions} from "class-transformer";
 import {ParamType} from "../types/ParamType";
 
 /**
@@ -51,17 +49,6 @@ export interface ParamMetadataArgs {
      * Extra parameter options.
      */
     extraOptions?: any;
-
-    /**
-     * Class transform options used to perform plainToClass operation.
-     */
-    classTransform?: ClassTransformOptions;
-
-    /**
-     * If true, class-validator will be used to validate param object.
-     * If validation options are given then it means validation will be applied (is true).
-     */
-    validate?: boolean|ValidatorOptions;
 
     /**
      * Explicitly set type which should be used for Body to perform transformation.

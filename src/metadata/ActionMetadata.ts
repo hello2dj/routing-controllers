@@ -1,7 +1,6 @@
 import {Action} from "../Action";
 import {ActionMetadataArgs} from "./args/ActionMetadataArgs";
 import {ActionType} from "./types/ActionType";
-import {ClassTransformOptions} from "class-transformer";
 import {ControllerMetadata} from "./ControllerMetadata";
 import {InterceptorMetadata} from "./InterceptorMetadata";
 import {ParamMetadata} from "./ParamMetadata";
@@ -90,11 +89,6 @@ export class ActionMetadata {
     isAuthorizedUsed: boolean;
 
     /**
-     * Class-transformer options for the action response content.
-     */
-    responseClassTransformOptions: ClassTransformOptions;
-
-    /**
      * Http code to be used on undefined action returned content.
      */
     undefinedResultCode: number | Function;
@@ -167,7 +161,6 @@ export class ActionMetadata {
      * Action metadata can be used only after its build.
      */
     build(responseHandlers: ResponseHandlerMetadata[]) {
-        const classTransformerResponseHandler = responseHandlers.find(handler => handler.type === "response-class-transform-options");
         const undefinedResultHandler = responseHandlers.find(handler => handler.type === "on-undefined");
         const nullResultHandler = responseHandlers.find(handler => handler.type === "on-null");
         const successCodeHandler = responseHandlers.find(handler => handler.type === "success-code");
@@ -176,9 +169,6 @@ export class ActionMetadata {
         const authorizedHandler = responseHandlers.find(handler => handler.type === "authorized");
         const contentTypeHandler = responseHandlers.find(handler => handler.type === "content-type");
         const bodyParam = this.params.find(param => param.type === "body");
-
-        if (classTransformerResponseHandler)
-            this.responseClassTransformOptions = classTransformerResponseHandler.value;
         
         this.undefinedResultCode = undefinedResultHandler
             ? undefinedResultHandler.value

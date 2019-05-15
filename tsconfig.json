@@ -1,5 +1,4 @@
 {
-    "version": "1.8.0",
     "compilerOptions": {
         "outDir": "build/compiled",
         "lib": ["es6"],

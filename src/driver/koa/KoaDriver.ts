@@ -218,9 +218,6 @@ export class KoaDriver extends BaseDriver {
             return options.next();
         }
 
-        // transform result if needed
-        result = this.transformResult(result, action, options);
-
         if (action.redirect) { // if redirect is set then do it
             if (typeof result === "string") {
                 options.response.redirect(result);

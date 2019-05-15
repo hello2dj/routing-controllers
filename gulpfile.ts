@@ -36,7 +36,7 @@ export class Gulpfile {
     @Task()
     compile() {
         return gulp.src("*.ts", { read: false })
-            .pipe(shell(["tsc"]));
+            .pipe(shell(["npx tsc"]));
     }
 
     // -------------------------------------------------------------------------

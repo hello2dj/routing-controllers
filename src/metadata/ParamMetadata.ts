@@ -1,8 +1,6 @@
-import {ValidatorOptions} from "class-validator";
 import {ActionMetadata} from "./ActionMetadata";
 import {ParamMetadataArgs} from "./args/ParamMetadataArgs";
 import {ParamType} from "./types/ParamType";
-import {ClassTransformOptions} from "class-transformer";
 import {Action} from "../Action";
 
 /**
@@ -85,17 +83,6 @@ export class ParamMetadata {
      */
     extraOptions: any;
 
-    /**
-     * Class transform options used to perform plainToClass operation.
-     */
-    classTransform?: ClassTransformOptions;
-
-    /**
-     * If true, class-validator will be used to validate param object.
-     * If validation options are given then it means validation will be applied (is true).
-     */
-    validate?: boolean|ValidatorOptions;
-
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
@@ -112,8 +99,6 @@ export class ParamMetadata {
         this.parse = args.parse;
         this.required = args.required;
         this.transform = args.transform;
-        this.classTransform = args.classTransform;
-        this.validate = args.validate;
         
         if (args.explicitType) {
             this.targetType = args.explicitType;

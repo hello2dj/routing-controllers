@@ -5,7 +5,6 @@ import {KoaDriver} from "./driver/koa/KoaDriver";
 import {MetadataArgsStorage} from "./metadata-builder/MetadataArgsStorage";
 import {RoutingControllers} from "./RoutingControllers";
 import {RoutingControllersOptions} from "./RoutingControllersOptions";
-import {ValidationOptions} from "class-validator";
 import {importClassesFromDirectories} from "./util/importClassesFromDirectories";
 
 // -------------------------------------------------------------------------
@@ -48,7 +47,6 @@ export * from "./decorator/Redirect";
 export * from "./decorator/Render";
 export * from "./decorator/Req";
 export * from "./decorator/Res";
-export * from "./decorator/ResponseClassTransformOptions";
 export * from "./decorator/Session";
 export * from "./decorator/State";
 export * from "./decorator/UploadedFile";
@@ -183,24 +181,6 @@ export function createExecutor<T extends BaseDriver>(driver: T, options: Routing
     } else {
         driver.isDefaultErrorHandlingEnabled = true;
     }
-
-    if (options.classTransformer !== undefined) {
-        driver.useClassTransformer = options.classTransformer;
-    } else {
-        driver.useClassTransformer = true;
-    }
-
-    if (options.validation !== undefined) {
-        driver.enableValidation = !!options.validation;
-        if (options.validation instanceof Object)
-            driver.validationOptions = options.validation as ValidationOptions;
-
-    } else {
-        driver.enableValidation = true;
-    }
-
-    driver.classToPlainTransformOptions = options.classToPlainTransformOptions;
-    driver.plainToClassTransformOptions = options.plainToClassTransformOptions;
 
     if (options.errorOverridingMap !== undefined)
         driver.errorOverridingMap = options.errorOverridingMap;

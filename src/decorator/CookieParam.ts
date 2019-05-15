@@ -16,8 +16,6 @@ export function CookieParam(name: string, options?: ParamOptions) {
             parse: options ? options.parse : false,
             required: options ? options.required : undefined,
             explicitType: options ? options.type : undefined,
-            classTransform: options ? options.transform : undefined,
-            validate: options ? options.validate : undefined
         });
     };
 }

@@ -1,8 +1,5 @@
 import {AuthorizationChecker} from "./AuthorizationChecker";
-import {ClassTransformOptions} from "class-transformer";
 import {CurrentUserChecker} from "./CurrentUserChecker";
-import { ParamOptions } from "./decorator-options/ParamOptions";
-import {ValidatorOptions} from "class-validator";
 
 /**
  * Routing controller initialization options.
@@ -34,29 +31,6 @@ export interface RoutingControllersOptions {
      * List of interceptors to register in the framework or directories from where to import all your interceptors.
      */
     interceptors?: Function[]|string[];
-
-    /**
-     * Indicates if class-transformer should be used to perform serialization / deserialization.
-     */
-    classTransformer?: boolean;
-
-    /**
-     * Global class transformer options passed to class-transformer during classToPlain operation.
-     * This operation is being executed when server returns response to user.
-     */
-    classToPlainTransformOptions?: ClassTransformOptions;
-
-    /**
-     * Global class transformer options passed to class-transformer during plainToClass operation.
-     * This operation is being executed when parsing user parameters.
-     */
-    plainToClassTransformOptions?: ClassTransformOptions;
-
-    /**
-     * Indicates if class-validator should be used to auto validate objects injected into params.
-     * You can also directly pass validator options to enable validator with a given options.
-     */
-    validation?: boolean|ValidatorOptions;
 
     /**
      * Indicates if development mode is enabled.
