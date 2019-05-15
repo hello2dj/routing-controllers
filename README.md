@@ -54,7 +54,6 @@ You can use routing-controllers with [express.js][1] or [koa.js][2].
     + [Interceptor classes](#interceptor-classes)
     + [Global interceptors](#global-interceptors)
   * [Creating instances of classes from action params](#creating-instances-of-classes-from-action-params)
-  * [Auto validating action params](#auto-validating-action-params)
   * [Using authorization features](#using-authorization-features)
       - [@Authorized decorator](#authorized-decorator)
       - [@CurrentUser decorator](#currentuser-decorator)
@@ -296,7 +295,7 @@ let express = require("express"); // or you can import it if you have installed 
 let app = express(); // your created express server
 // app.use() // you can configure it the way you want
 useExpressServer(app, { // register created express server in routing-controllers
-    controllers: [UserController] // and configure it the way you need (controllers, validation, etc.)
+    controllers: [UserController] // and configure it the way you need (controllers, etc.)
 });
 app.listen(3000); // run your express server
 ```
@@ -380,10 +379,6 @@ To inject request body, use `@Body` decorator:
 saveUser(@Body() user: User) {
 }
 ```
-
-If you specify a class type to parameter that is decorated with `@Body()`,
-routing-controllers will use [class-transformer][4] to create instance of the given class type from the data received in request body.
-To disable this behaviour you need to specify a `{ classTransformer: false }` in RoutingControllerOptions when creating a server.
 
 #### Inject request body parameters
 
@@ -502,12 +497,6 @@ save(@Body({ required: true }) user: any) {
 
 Same you can do with all other parameters `@QueryParam`, `@BodyParam` and others.
 If user request does not contain required parameter routing-controller will throw an error.
-
-#### Convert parameters to objects
-
-If you specify a class type to parameter that is decorated with parameter decorator,
-routing-controllers will use [class-transformer][4] to create instance of that class type.
-More info about this feature is available [here](#creating-instances-of-classes-from-action-params).
 
 #### Set custom ContentType
 
@@ -1126,111 +1115,6 @@ export class NameCorrectionInterceptor implements InterceptorInterface {
 
 }
 ```
-
-## Creating instances of classes from action params
-
-When user sends a json object and you are parsing it, sometimes you want to parse it into object of some class, instead of parsing it into simple literal object.
-You have ability to do this using [class-transformer][4].
-To use it simply specify a `classTransformer: true` option on application bootstrap:
-
-```typescript
-import "reflect-metadata";
-import {createExpressServer} from "routing-controllers";
-
-createExpressServer({
-    classTransformer: true
-}).listen(3000);
-```
-
-Now, when you parse your action params, if you have specified a class, routing-controllers will create you a class
-of that instance with the data sent by a user:
-
-```typescript
-export class User {
-    firstName: string;
-    lastName: string;
-
-    getName(): string {
-        return this.lastName + " " + this.firstName;
-    }
-}
-
-@Controller()
-export class UserController {
-
-    post(@Body() user: User) {
-        console.log("saving user " + user.getName());
-    }
-
-}
-```
-
-If `User` is an interface - then simple literal object will be created.
-If its a class - then instance of this class will be created.
-
-This technique works with `@Body`, `@Param`, `@QueryParam`, `@BodyParam`, and other decorators.
-Learn more about class-transformer and how to handle more complex object constructions [here][4].
-This behaviour is enabled by default.
-If you want to disable it simply pass `classTransformer: false` to createExpressServer method.
-
-## Auto validating action params
-
-Sometimes parsing a json object into instance of some class is not enough.
-E.g. `class-transformer` doesn't check whether the property's types are correct, so you can get runtime error if you rely on TypeScript type safe. Also you may want to validate the object to check e.g. whether the password string is long enough or entered e-mail is correct.
-
-It can be done easily thanks to integration with [class-validator][9]. This behaviour is **enabled** by default. If you want to disable it, you need to do it explicitly e.g. by passing `validation: false` option on application bootstrap:
-```typescript
-import "reflect-metadata";
-import { createExpressServer } from "routing-controllers";
-
-createExpressServer({
-    validation: false
-}).listen(3000);
-```
-
-If you want to turn on the validation only for some params, not globally for every parameter, you can do this locally by setting `validate: true` option in parameter decorator options object:
-
-```typescript
-@Post("/login/")
-login(@Body({ validate: true }) user: User) {
-```
-
-Now you need to define the class which type will be used as type of controller's method param.
-Decorate the properties with appropriate validation decorators.
-```typescript
-export class User {
-
-    @IsEmail()
-    email: string;
-
-    @MinLength(6)
-    password: string;
-
-}
-```
-If you haven't used class-validator yet, you can learn how to use the decorators and handle more complex object validation [here][9].
-
-Now, if you have specified a class type, your action params will be not only an instance of that class (with the data sent by a user) but they will be validated too, so you don't have to worry about eg. incorrect e-mail or too short password and manual checks every property in controller method body.
-
-```typescript
-@Controller()
-export class UserController {
-
-    @Post("/login/")
-    login(@Body() user: User) {
-        console.log(`${user.email} is for 100% sure a valid e-mail adress!`);
-        console.log(`${user.password.length} is for 100% sure 6 chars or more!`);
-    }
-
-}
-```
-If the param doesn't satisfy the requirements defined by class-validator decorators,
-an error will be thrown and captured by routing-controller, so the client will receive 400 Bad Request and JSON with nice detailed [Validation errors](https://github.com/pleerock/class-validator#validation-errors) array.
-
-If you need special options for validation (groups, skipping missing properties, etc.) or transforming (groups, excluding prefixes, versions, etc.), you can pass them as global config as `validation ` in createExpressServer method or as a local `validate` setting for method parameter - `@Body({ validate: localOptions })`.
-
-This technique works not only with `@Body` but also with `@Param`, `@QueryParam`, `@BodyParam` and other decorators.
-
 ## Using authorization features
 
 Routing-controllers comes with two decorators helping you to organize authorization in your application.
@@ -1461,7 +1345,6 @@ export class QuestionController {
 | `@HttpCode(code: number)`                                          | `@HttpCode(201)` post()                                   | Allows to explicitly set HTTP code to be returned in the response.                                                                             |
 | `@OnNull(codeOrError: number\|Error)`                              | `@OnNull(201)` post()                                     | Sets a given HTTP code when controller action returned null.                                                                                   |
 | `@OnUndefined(codeOrError: number\|Error)`                         | `@OnUndefined(201)` post()                                | Sets a given HTTP code when controller action returned undefined.                                                                              |
-| `@ResponseClassTransformOptions(options: ClassTransformOptions)`   | `@ResponseClassTransformOptions({/*...*/})` get()         | Sets options to be passed to class-transformer when it used for classToPlain a response result.                                                |
 | `@Render(template: string)`                                        | `@Render("user-list.html")` get()                         | Renders a given html template. Data returned by a controller serve as template variables.                                                      |
 
 ## Samples
@@ -1480,9 +1363,7 @@ See information about breaking changes and release notes [here](CHANGELOG.md).
 [1]: http://expressjs.com/
 [2]: http://koajs.com/
 [3]: https://github.com/expressjs/multer
-[4]: https://github.com/pleerock/class-transformer
 [5]: https://www.npmjs.com/package/express-session
 [6]: https://www.npmjs.com/package/koa-session
 [7]: https://www.npmjs.com/package/koa-generic-session
 [8]: http://koajs.com/#ctx-state
-[9]: https://github.com/pleerock/class-validator
